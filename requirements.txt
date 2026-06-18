@@ -1,0 +1,7 @@
+torch==2.6.0
+transformers==5.8.0
+qwen-vl-utils
+Pillow
+tqdm
+modelscope
+huggingface_hub

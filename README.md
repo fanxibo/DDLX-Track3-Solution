@@ -82,3 +82,19 @@ Edit `image_dir` and `zip_path` in `main()` before running. Supports GPU auto-de
 - Code: MIT
 - Model: Apache 2.0 (Alibaba Qwen Team)
 - Data: Apache 2.0
+
+## Reproducibility and Compliance Notes
+
+This repository releases the complete implementation of our DDL-X Track 3 solution.
+
+The solution is zero-shot and inference-only. It does not train or fine-tune the backbone model. Therefore, there is no task-specific training pipeline, optimizer, learning rate schedule, checkpoint, LoRA adapter, or additional trainable parameter to release. The final model weights are the public `Qwen/Qwen2-VL-7B-Instruct` weights loaded through Hugging Face Transformers.
+
+Only the organizer-recommended DDL-X dataset was used. No external datasets, private datasets, or additional generated training samples were used.
+
+The final submission file is `results.zip`. The inference code is provided in `src/inference.py`. The model and hardware configuration are documented in `model_config.md`. The exact inference-only configuration is documented in `TRAINING.md`. Reproduction steps are provided in `REPRODUCE.md`.
+
+To validate the submission format, run:
+
+```bash
+python scripts/check_submission_format.py results.zip
+```
