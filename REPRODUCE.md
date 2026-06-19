@@ -1,86 +1,73 @@
 # Reproducibility Instructions
 
-This document describes how to reproduce the inference pipeline and generate a Codabench-style submission zip.
-
 ## 1. Environment
-
 ```bash
 conda create -n ddl_env python=3.10 -y
 conda activate ddl_env
 pip install -r requirements.txt
 ```
 
-The final run was performed with:
-
+Suggested runtime used in the public repo documentation:
 - Python 3.10
-- CUDA 12.4
+- CUDA-capable GPU
 - PyTorch 2.6.0
 - Transformers 5.8.0
-- 1x NVIDIA A30 24GB GPU
 
 ## 2. Model weights
-
-The solution uses the public model weights from:
-
+This solution uses the public open-source backbone:
 ```text
 Qwen/Qwen2-VL-7B-Instruct
 ```
 
-The model is loaded automatically by `transformers` in `src/inference.py`. No fine-tuned checkpoints or private weights are required.
+For reproducibility, it is recommended to pin the model revision to:
+```text
+eed13092ef92e448dd6875b2a00151bd3f7db0ac
+```
 
-## 3. Dataset
-
-Download the organizer-recommended DDL-X dataset and put test images under:
-
+## 3. Dataset layout
+Place the challenge test images under:
 ```text
 ./image/
 ```
 
-Expected structure:
-
+Example:
 ```text
 DDLX-Track3-Solution/
 ├── image/
 │   ├── 000001.jpg
 │   ├── 000002.jpg
 │   └── ...
-├── src/
-│   └── inference.py
-└── requirements.txt
+├── run.sh
+├── requirements.txt
+└── src/
+    └── inference.py
 ```
 
 ## 4. Run inference
-
 ```bash
-python src/inference.py
+bash run.sh ./image ./submission_test.zip
 ```
 
-By default, the script reads images from `./image/` and writes predictions to:
-
-```text
-submission.zip
-```
-
-Each prediction file is stored under the `json/` folder inside the zip.
-
-## 5. Check submission format
-
+Equivalent direct command:
 ```bash
-python scripts/check_submission_format.py submission.zip
+python src/inference.py --image_dir ./image --output_zip ./submission_test.zip
 ```
 
-The checker validates that each JSON file contains the required fields:
+If the model has already been downloaded locally, you can use:
+```bash
+python src/inference.py --image_dir ./image --output_zip ./submission_test.zip --local_files_only
+```
 
-- `classification_result`
-- `bounding_boxes`
-- `visible_forgery_traces`
-
-For compatibility, it also accepts the human-readable field names used in the README:
-
-- `Classification result`
+## 5. Output format
+The output zip must contain a `json/` directory, with one JSON file per image.
+Each JSON must include:
 - `Bounding boxes`
 - `Visible forgery traces`
+- `Classification result`
 
-## 6. Final submitted file
-
-The repository includes `results.zip`, which is the archived final prediction file corresponding to the submitted solution.
+## 6. Verification advice
+Before publishing or sending the repo to organizers:
+1. regenerate `submission_test.zip` from this exact repo;
+2. confirm the zip structure is `json/*.json`;
+3. confirm the repo README does not describe a later prompt variant;
+4. confirm no personal absolute paths remain in code or docs.
