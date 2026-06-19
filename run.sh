@@ -13,8 +13,8 @@ echo "Output zip  : ${OUTPUT_ZIP}"
 echo "Model       : ${MODEL_NAME}"
 echo "Revision    : ${REVISION}"
 
-python src/inference.py 
---image_dir "${IMAGE_DIR}" 
---output_zip "${OUTPUT_ZIP}" 
---model_name "${MODEL_NAME}" 
---revision "${REVISION}"
+python src/inference.py \
+  --image_dir "${IMAGE_DIR}" \
+  --output_zip "${OUTPUT_ZIP}" \
+  --model_name "${MODEL_NAME}" \
+  --revision "${REVISION}"
